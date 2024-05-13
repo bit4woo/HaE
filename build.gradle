@@ -2,6 +2,14 @@ plugins {
     id 'java'
 }
 
+// 在构建脚本中应用Java插件
+apply plugin: 'java'
+
+// 配置Java版本
+sourceCompatibility = '1.8' // 设置Java源代码兼容性为Java 8
+targetCompatibility = '1.8' // 设置编译后的字节码兼容性为Java 8
+
+
 repositories {
     mavenCentral()
 }
@@ -19,15 +27,16 @@ sourceSets {
 }
 
 task fatJar(type: Jar) {
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    archiveFileName.set("${project.name}-all.jar")
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
 
+
 dependencies {
-    compile 'net.portswigger.burp.extender:burp-extender-api:1.7.13'
-    compile 'org.jetbrains:annotations:16.0.2'
-    compile group: 'org.yaml', name: 'snakeyaml', version: '1.28'
-    compile 'net.sourceforge.jregex:jregex:1.2_01'
-    compile 'dk.brics.automaton:automaton:1.11-8'
+    implementation  'net.portswigger.burp.extender:burp-extender-api:1.7.13'
+    implementation  'org.jetbrains:annotations:16.0.2'
+    implementation  group: 'org.yaml', name: 'snakeyaml', version: '1.28'
+    implementation  'net.sourceforge.jregex:jregex:1.2_01'
+    implementation  'dk.brics.automaton:automaton:1.11-8'
 }
